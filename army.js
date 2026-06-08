@@ -1,4 +1,4 @@
-import { auth, db } from './config.js';
+import { appUrl, auth, db } from './config.js';
 
 // Lista de Canciones de Éxitos reales para ARMY (Archive.org streams estables)
 const generalPlaylist = [
@@ -38,7 +38,7 @@ let isGeneralPlaying = false;
 auth.onAuthStateChanged((user) => {
     if (!user) {
         // Redirigir a login si no está autenticado
-        window.location.href = "/index.html";
+        window.location.replace(appUrl("index.html"));
     } else {
         const dispName = user.displayName || user.email.split('@')[0];
         document.getElementById("armyUserName").textContent = dispName;
@@ -56,7 +56,7 @@ document.getElementById("btnLogout").addEventListener("click", () => {
         window.heartWallUnsubscribe();
     }
     auth.signOut().then(() => {
-        window.location.href = "/index.html";
+        window.location.replace(appUrl("index.html"));
     });
 });
 
@@ -315,6 +315,56 @@ const quizResultBox = document.getElementById("quizResultBox");
 const quizQuestionText = document.getElementById("quizQuestionText");
 const quizOptionsContainer = document.getElementById("quizOptionsContainer");
 const currentQuestionNum = document.getElementById("currentQuestionNum");
+let quizCurrentQuestion = 0;
+let quizScores = {};
+
+const quizQuestions = [
+    {
+        question: "Que plan te suena mas perfecto?",
+        options: [
+            { text: "Museo, cafe y una charla profunda", member: "RM" },
+            { text: "Cocinar algo rico y reir sin parar", member: "Jin" },
+            { text: "Noche tranquila con musica y calma", member: "Suga" },
+            { text: "Bailar, salir y llenar el dia de energia", member: "J-Hope" }
+        ]
+    },
+    {
+        question: "Que detalle te enamora mas?",
+        options: [
+            { text: "Que te escuchen con mucha ternura", member: "Jimin" },
+            { text: "Una sorpresa artistica y diferente", member: "V" },
+            { text: "Una promesa leal y protectora", member: "Jungkook" },
+            { text: "Un consejo inteligente justo a tiempo", member: "RM" }
+        ]
+    },
+    {
+        question: "Elige una vibra para tu corazon:",
+        options: [
+            { text: "Dulce, divertida y luminosa", member: "Jin" },
+            { text: "Reservada, intensa y fiel", member: "Suga" },
+            { text: "Brillante, optimista y valiente", member: "J-Hope" },
+            { text: "Romantica, cuidadosa y suave", member: "Jimin" }
+        ]
+    },
+    {
+        question: "Que regalo guardarias para siempre?",
+        options: [
+            { text: "Una foto vintage con una nota secreta", member: "V" },
+            { text: "Una cancion cantada solo para ti", member: "Jungkook" },
+            { text: "Un libro marcado con frases especiales", member: "RM" },
+            { text: "Una cena hecha con mucho carino", member: "Jin" }
+        ]
+    },
+    {
+        question: "En un dia dificil necesitas a alguien que...",
+        options: [
+            { text: "Te acompane en silencio y te sostenga", member: "Suga" },
+            { text: "Te haga sonreir hasta olvidar la tristeza", member: "J-Hope" },
+            { text: "Te abrace y cuide cada detalle", member: "Jimin" },
+            { text: "Se quede contigo hasta que todo mejore", member: "Jungkook" }
+        ]
+    }
+];
 
 const memberProfiles = {
     "RM": { desc: "Tu alma gemela es RM (Namjoon). Eres compatible con él por tu amor por las conversaciones profundas, el arte y los libros. Te encantará compartir tés calientes y caminatas por museos.", icon: "🐨" },

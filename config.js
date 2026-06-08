@@ -16,6 +16,12 @@ export const auth = firebase.auth();
 export const db = firebase.firestore();
 
 // CAMBIA ESTO POR EL CORREO ELECTRÓNICO REAL DE TU NOVIA
-export const QUEEN_EMAIL = "novia@gmail.com";
+export const QUEEN_EMAIL = import.meta.env.VITE_QUEEN_EMAIL || "novia@gmail.com";
 export const QUEEN_PASSWORD = import.meta.env.VITE_QUEEN_PASSWORD;
 
+export function appUrl(page) {
+    const base = import.meta.env.BASE_URL || "/";
+    const cleanBase = base.endsWith("/") ? base : `${base}/`;
+    const cleanPage = page.replace(/^\/+/, "");
+    return `${cleanBase}${cleanPage}`;
+}

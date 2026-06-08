@@ -1,21 +1,4 @@
-import { auth, QUEEN_EMAIL, QUEEN_PASSWORD } from './config.js';
-
-// Ensure the special queen account exists (run once on load)
-function ensureQueenUser(){
-  auth.signInWithEmailAndPassword(QUEEN_EMAIL, QUEEN_PASSWORD).catch(err=>{
-    if(err.code==='auth/user-not-found'){
-      auth.createUserWithEmailAndPassword(QUEEN_EMAIL, QUEEN_PASSWORD).then(()=>{
-        console.log('Queen account created');
-      }).catch(e=>console.error('Error creating queen account',e));
-    } else if(err.code==='auth/wrong-password'){
-      // Account exists, password may be different; ignore for now
-    } else {
-      console.error('Error signing in queen account',err);
-    }
-  });
-}
-ensureQueenUser();
-
+import { appUrl, auth, QUEEN_EMAIL } from './config.js';
 
 // ==========================================
 // CANVAS DE ESTRELLAS DE FONDO
@@ -116,10 +99,10 @@ auth.onAuthStateChanged((user) => {
 function handleAuthRedirect(user) {
     if (user.email && user.email.toLowerCase() === QUEEN_EMAIL.toLowerCase()) {
         // Es tu novia! Mostrar disolución mágica y redireccionar
-        triggerMagicTransition("/queen.html");
+        triggerMagicTransition(appUrl("queen.html"));
     } else {
         // Es una ARMY común, redireccionar directo
-        window.location.href = "/army.html";
+        window.location.assign(appUrl("army.html"));
     }
 }
 
@@ -129,7 +112,7 @@ function triggerMagicTransition(targetUrl) {
     magicTransition.style.opacity = "1";
 
     setTimeout(() => {
-        window.location.href = targetUrl;
+        window.location.assign(targetUrl);
     }, 2000);
 }
 

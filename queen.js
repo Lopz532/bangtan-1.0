@@ -1,4 +1,4 @@
-import { auth, QUEEN_EMAIL } from './config.js';
+import { appUrl, auth, QUEEN_EMAIL } from './config.js';
 
 const ANNIVERSARY_DATE = new Date("2025-12-13T00:00:00");
 
@@ -39,7 +39,7 @@ let isSpecialPlaying = false;
 auth.onAuthStateChanged((user) => {
     if (!user || user.email.toLowerCase() !== QUEEN_EMAIL.toLowerCase()) {
         // Si no está autenticado o no es el correo especial, expulsar
-        window.location.href = "/index.html";
+        window.location.replace(appUrl("index.html"));
     } else {
         const dispName = user.displayName || 'Valentina';
         document.getElementById("gfWelcomeText").textContent = `✨ Bienvenida, ${dispName} ✨`;
@@ -55,7 +55,7 @@ auth.onAuthStateChanged((user) => {
 document.getElementById("btnLogout").addEventListener("click", () => {
     audioElement.pause();
     auth.signOut().then(() => {
-        window.location.href = "/index.html";
+        window.location.replace(appUrl("index.html"));
     });
 });
 
