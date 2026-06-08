@@ -41,9 +41,9 @@ auth.onAuthStateChanged((user) => {
         // Si no está autenticado o no es el correo especial, expulsar
         window.location.replace(appUrl("index.html"));
     } else {
-        const dispName = user.displayName || 'Valentina';
+        const dispName = user.displayName || 'My Chaparrita';
         document.getElementById("gfWelcomeText").textContent = `✨ Bienvenida, ${dispName} ✨`;
-        
+
         // Arrancar Widgets del Panel
         startAnniversaryCounter();
         loadSpecialPlayerTrack(0);
@@ -228,7 +228,7 @@ function loadSpecialPlayerTrack(index) {
     specialTrackTitle.textContent = track.title;
     specialTrackArtist.textContent = `${track.artist} (Dedicado por Jorge)`;
     specialDedicationText.textContent = track.dedication;
-    
+
     audioElement.src = track.url;
     audioElement.load();
     specialProgress.style.width = "0%";
@@ -276,7 +276,7 @@ specialProgressContainer.addEventListener("click", (e) => {
     const clickX = e.clientX - rect.left;
     const width = rect.width;
     const percentage = clickX / width;
-    
+
     if (audioElement.duration) {
         audioElement.currentTime = percentage * audioElement.duration;
     }
@@ -338,7 +338,7 @@ function zoomPolaroid(cardEl) {
     zoomedPolaroid.innerHTML = cardEl.innerHTML;
     polaroidOverlay.classList.remove("hidden");
     polaroidOverlay.style.opacity = "0";
-    
+
     setTimeout(() => {
         polaroidOverlay.style.opacity = "1";
         polaroidOverlay.style.transition = "opacity 0.3s ease";
