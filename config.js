@@ -29,7 +29,7 @@ export const auth = firebase.auth();
 export const db = firebase.firestore();
 
 // CAMBIA ESTO POR EL CORREO ELECTRÓNICO REAL DE TU NOVIA
-export const QUEEN_EMAIL = envValue("VITE_QUEEN_EMAIL", "jorgelopz532@gmail.com");
+export const QUEEN_EMAIL = envValue("VITE_QUEEN_EMAIL", "viky050108@gmail.com");
 
 export function normalizeEmail(email) {
     return String(email || "").trim().toLowerCase();
