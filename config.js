@@ -31,6 +31,15 @@ export const db = firebase.firestore();
 // CAMBIA ESTO POR EL CORREO ELECTRÓNICO REAL DE TU NOVIA
 export const QUEEN_EMAIL = envValue("VITE_QUEEN_EMAIL", "jorgelopz532@gmail.com");
 
+export function normalizeEmail(email) {
+    return String(email || "").trim().toLowerCase();
+}
+
+export function isQueenUser(userOrEmail) {
+    const email = typeof userOrEmail === "string" ? userOrEmail : userOrEmail?.email;
+    return normalizeEmail(email) === normalizeEmail(QUEEN_EMAIL);
+}
+
 export function appUrl(page) {
     const base = envValue("BASE_URL", "/");
     const cleanBase = base.endsWith("/") ? base : `${base}/`;

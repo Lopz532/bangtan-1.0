@@ -1,4 +1,4 @@
-import { appUrl, auth, firebase, QUEEN_EMAIL } from './config.js';
+import { appUrl, auth, firebase, isQueenUser, QUEEN_EMAIL } from './config.js';
 
 // ==========================================
 // CANVAS DE ESTRELLAS DE FONDO
@@ -97,7 +97,7 @@ auth.onAuthStateChanged((user) => {
 
 // Redireccionar al usuario a la página correcta
 function handleAuthRedirect(user) {
-    if (user.email && user.email.toLowerCase() === QUEEN_EMAIL.toLowerCase()) {
+    if (isQueenUser(user)) {
         // Es tu novia! Mostrar disolución mágica y redireccionar
         triggerMagicTransition(appUrl("queen.html"));
     } else {

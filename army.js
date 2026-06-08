@@ -1,4 +1,4 @@
-import { appUrl, auth, db, firebase } from './config.js';
+import { appUrl, auth, db, firebase, isQueenUser } from './config.js';
 
 // Lista de Canciones de Éxitos reales para ARMY (Archive.org streams estables)
 const generalPlaylist = [
@@ -39,6 +39,8 @@ auth.onAuthStateChanged((user) => {
     if (!user) {
         // Redirigir a login si no está autenticado
         window.location.replace(appUrl("index.html"));
+    } else if (isQueenUser(user)) {
+        window.location.replace(appUrl("queen.html"));
     } else {
         const dispName = user.displayName || user.email.split('@')[0];
         document.getElementById("armyUserName").textContent = dispName;
@@ -261,7 +263,9 @@ function loadHeartWall() {
                 const msg = doc.data();
                 const heartEl = document.createElement("div");
                 heartEl.className = `glowing-heart-msg theme-${msg.color || 'purple'}`;
-                heartEl.innerHTML = `<span>💜</span> ${escapeHTML(msg.message)}`;
+                heartEl.title = "Mantener presionado para eliminar";
+                heartEl.innerHTML = `<span>💜</span> <span class="heart-msg-text">${escapeHTML(msg.message)}</span>`;
+                bindDeleteOnHold(heartEl, doc.id);
                 heartWall.appendChild(heartEl);
             });
 
@@ -272,6 +276,48 @@ function loadHeartWall() {
         }, (error) => {
             console.error("Error al cargar muro de corazones:", error);
         });
+}
+
+function bindDeleteOnHold(element, messageId) {
+    let holdTimer = null;
+    let deleteStarted = false;
+
+    const clearHold = () => {
+        if (holdTimer) {
+            clearTimeout(holdTimer);
+            holdTimer = null;
+        }
+        element.classList.remove("delete-pending");
+    };
+
+    const requestDelete = () => {
+        deleteStarted = true;
+        element.classList.remove("delete-pending");
+
+        const shouldDelete = window.confirm("Eliminar este mensaje del muro?");
+        if (!shouldDelete) return;
+
+        db.collection("heart_messages").doc(messageId).delete()
+            .catch((error) => {
+                console.error("Error al eliminar mensaje:", error);
+                alert("No se pudo eliminar el mensaje: " + error.message);
+            });
+    };
+
+    element.addEventListener("pointerdown", (event) => {
+        if (event.button !== undefined && event.button !== 0) return;
+        deleteStarted = false;
+        element.classList.add("delete-pending");
+        holdTimer = setTimeout(requestDelete, 750);
+    });
+
+    element.addEventListener("pointerup", clearHold);
+    element.addEventListener("pointercancel", clearHold);
+    element.addEventListener("pointerleave", clearHold);
+    element.addEventListener("contextmenu", (event) => {
+        event.preventDefault();
+        if (!deleteStarted) requestDelete();
+    });
 }
 
 heartForm.addEventListener("submit", (e) => {

@@ -1,4 +1,4 @@
-import { appUrl, auth, QUEEN_EMAIL } from './config.js';
+import { appUrl, auth, isQueenUser } from './config.js';
 
 const ANNIVERSARY_DATE = new Date("2025-12-13T00:00:00");
 
@@ -37,7 +37,7 @@ let isSpecialPlaying = false;
 // SEGURIDAD: CONTROL DE ACCESO
 // ==========================================
 auth.onAuthStateChanged((user) => {
-    if (!user || user.email.toLowerCase() !== QUEEN_EMAIL.toLowerCase()) {
+    if (!user || !isQueenUser(user)) {
         // Si no está autenticado o no es el correo especial, expulsar
         window.location.replace(appUrl("index.html"));
     } else {
