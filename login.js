@@ -1,4 +1,21 @@
-import { auth, QUEEN_EMAIL } from './config.js';
+import { auth, QUEEN_EMAIL, QUEEN_PASSWORD } from './config.js';
+
+// Ensure the special queen account exists (run once on load)
+function ensureQueenUser(){
+  auth.signInWithEmailAndPassword(QUEEN_EMAIL, QUEEN_PASSWORD).catch(err=>{
+    if(err.code==='auth/user-not-found'){
+      auth.createUserWithEmailAndPassword(QUEEN_EMAIL, QUEEN_PASSWORD).then(()=>{
+        console.log('Queen account created');
+      }).catch(e=>console.error('Error creating queen account',e));
+    } else if(err.code==='auth/wrong-password'){
+      // Account exists, password may be different; ignore for now
+    } else {
+      console.error('Error signing in queen account',err);
+    }
+  });
+}
+ensureQueenUser();
+
 
 // ==========================================
 // CANVAS DE ESTRELLAS DE FONDO
