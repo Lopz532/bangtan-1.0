@@ -1,4 +1,4 @@
-import { appUrl, auth, db } from './config.js';
+import { appUrl, auth, db, firebase } from './config.js';
 
 // Lista de Canciones de Éxitos reales para ARMY (Archive.org streams estables)
 const generalPlaylist = [

@@ -1,4 +1,4 @@
-import { appUrl, auth, QUEEN_EMAIL } from './config.js';
+import { appUrl, auth, firebase, QUEEN_EMAIL } from './config.js';
 
 // ==========================================
 // CANVAS DE ESTRELLAS DE FONDO

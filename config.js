@@ -1,3 +1,9 @@
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+
+export { firebase };
+
 // Inicialización centralizada de Firebase usando variables de entorno de Vite
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
