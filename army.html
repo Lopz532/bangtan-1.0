@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BANGTAN - ARMY Portal</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <!-- Canvas de Estrellas de Fondo -->
+    <canvas id="starsCanvas"></canvas>
+
+    <!-- PANTALLA ARMY GENERAL (PÚBLICO) -->
+    <main id="armyScreen" class="active-screen">
+        <nav class="navbar glass">
+            <div class="nav-logo">BANGTAN <span>ARMY</span></div>
+            <div class="nav-user-info">
+                <span class="user-tag">💜 ARMY: <strong id="armyUserName">Invitado</strong></span>
+                <button class="btn-logout" id="btnLogout">Salir</button>
+            </div>
+        </nav>
+
+        <div class="container">
+            <header class="hero-section text-center">
+                <h1>Bienvenida al Universo ARMY 🌌</h1>
+                <p>Tu espacio diario para celebrar a los 7 chicos que cambiaron nuestro mundo. Disfruta de la música, deja un corazón en el muro y descubre quién es tu alma gemela.</p>
+            </header>
+
+            <div class="grid-layout">
+                <!-- Muro de Corazones Borahae -->
+                <section class="card glass wall-section">
+                    <div class="card-header">
+                        <h2>Muro de Corazones Borahae 💜</h2>
+                        <p>Deja un mensaje de amor brillante que se unirá al firmamento de ARMY.</p>
+                    </div>
+                    <div class="heart-wall-container">
+                        <div id="heartWall" class="heart-wall">
+                            <!-- Corazones cargados dinámicamente -->
+                        </div>
+                    </div>
+                    <form id="heartForm" class="heart-form">
+                        <input type="text" id="heartMessage" maxlength="60" required placeholder="Escribe un mensaje corto para BTS o para ARMY...">
+                        <div class="color-picker">
+                            <span class="color-dot active" data-color="purple" style="background: var(--purple-neon);"></span>
+                            <span class="color-dot" data-color="pink" style="background: var(--pink-neon);"></span>
+                            <span class="color-dot" data-color="blue" style="background: var(--blue-neon);"></span>
+                        </div>
+                        <button type="submit" class="btn-send-heart">Enviar Corazón</button>
+                    </form>
+                </section>
+
+                <!-- Reproductor de Éxitos -->
+                <section class="card glass player-section">
+                    <div class="card-header">
+                        <h2>ARMY Music Player 🎵</h2>
+                        <p>Sintoniza los mejores éxitos de BTS</p>
+                    </div>
+                    <div class="music-player-container">
+                        <div class="vinyl-wrapper">
+                            <div class="vinyl-disk" id="generalVinyl">
+                                <div class="vinyl-label"></div>
+                            </div>
+                            <div class="tone-arm" id="generalArm"></div>
+                        </div>
+                        <div class="player-controls">
+                            <h3 id="generalTrackTitle">Selecciona una pista</h3>
+                            <p id="generalTrackArtist">BTS</p>
+                            <div class="progress-bar-container" id="generalProgressContainer">
+                                <div class="progress-bar" id="generalProgress" style="width: 0%;"></div>
+                            </div>
+                            <div class="btn-group-player">
+                                <button class="btn-player" id="generalPrevBtn">⏮️</button>
+                                <button class="btn-player btn-play-pause" id="generalPlayBtn">▶️</button>
+                                <button class="btn-player" id="generalNextBtn">⏭️</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Quiz: Tu Alma Gemela de BTS -->
+            <section class="card glass quiz-section">
+                <div class="card-header text-center">
+                    <h2>BTS Soulmate Matcher 💖</h2>
+                    <p>Responde estas preguntas con el corazón y descubre qué miembro de BTS es tu alma gemela.</p>
+                </div>
+                <div id="quizContainer" class="quiz-container">
+                    <div class="quiz-start text-center" id="quizStartScreen">
+                        <p>¿Será RM, Jin, Suga, J-Hope, Jimin, V o Jungkook? Descúbrelo ahora.</p>
+                        <button class="btn-primary" onclick="window.startQuiz()">Iniciar Test</button>
+                    </div>
+                    <div class="quiz-question-box hidden" id="quizQuestionBox">
+                        <h3 id="quizQuestionText">Pregunta 1</h3>
+                        <div class="quiz-options" id="quizOptionsContainer">
+                            <!-- Opciones dinámicas -->
+                        </div>
+                        <div class="quiz-progress-text">Pregunta <span id="currentQuestionNum">1</span> de 5</div>
+                    </div>
+                    <div class="quiz-result hidden text-center" id="quizResultBox">
+                        <div class="result-card glass">
+                            <h3>¡Tu Alma Gemela es!</h3>
+                            <div class="result-member-avatar" id="resultAvatar">💜</div>
+                            <h2 id="resultName">Jungkook</h2>
+                            <p id="resultDesc">Eres compatible con él por tu lealtad y pasión.</p>
+                            <button class="btn-primary" onclick="window.resetQuiz()">Volver a hacer</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Reproducción real de audio -->
+    <audio id="audioElement" preload="auto"></audio>
+
+    <!-- Firebase SDK (Compat v10) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <!-- Script de control de la página -->
+    <script type="module" src="/army.js"></script>
+</body>
+</html>
